@@ -1,6 +1,7 @@
 name = "basecamp-cards-github-sync"
 main = "src/index.ts"
 compatibility_date = "2024-01-01"
+account_id = "caff77534dfca126c01bec72b617d74e"
 
 [vars]
 # Non-secret config vars go here
@@ -9,8 +10,8 @@ compatibility_date = "2024-01-01"
 # KV namespace for storing card-to-issue mappings
 [[kv_namespaces]]
 binding = "MAPPINGS"
-id = "your-kv-namespace-id"
-preview_id = "your-preview-kv-namespace-id"
+id = "24cbdb2fcd7e40bd8fa1d70627eeb21f"
+preview_id = "2ec0a04027904918bd811519d3949527"
 
 # Secrets (set via `wrangler secret put`):
 # - GITHUB_APP_PRIVATE_KEY
