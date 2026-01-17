@@ -1,0 +1,13 @@
+# Copy this to .dev.vars and fill in your values
+
+# GitHub App credentials
+GITHUB_APP_ID=your-app-id
+GITHUB_APP_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"
+GITHUB_APP_INSTALLATION_ID=your-installation-id
+
+# Basecamp credentials
+BASECAMP_ACCESS_TOKEN=your-access-token
+BASECAMP_ACCOUNT_ID=your-account-id
+
+# Optional: Basecamp webhook secret for signature verification
+BASECAMP_WEBHOOK_SECRET=your-webhook-secret
