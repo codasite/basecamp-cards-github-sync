@@ -34,7 +34,7 @@ async function verifySignature(
 
 webhook.post("/", async (c) => {
   const bodyText = await c.req.text();
-  const signature = c.req.header("X-Basecamp-Signature");
+  const signature = c.req.header("X-Basecamp-Signature") ?? null;
 
   // Verify webhook signature
   const isValid = await verifySignature(
@@ -53,12 +53,16 @@ webhook.post("/", async (c) => {
 
   // Handle different event types
   switch (payload.kind) {
-    case "comment_created":
-      return handleCommentCreated(c.env, payload);
+    case "comment_created": {
+      const result = await handleCommentCreated(c.env, payload);
+      return c.json(result);
+    }
 
     case "card_content_changed":
-    case "card_title_changed":
-      return handleCardUpdated(c.env, payload);
+    case "card_title_changed": {
+      const result = await handleCardUpdated(c.env, payload);
+      return c.json(result);
+    }
 
     default:
       // Ignore other events
@@ -66,7 +70,14 @@ webhook.post("/", async (c) => {
   }
 });
 
-async function handleCommentCreated(env: Env, payload: BasecampWebhookPayload) {
+interface WebhookResult {
+  status: string;
+  reason?: string;
+  type?: string;
+  issueNumber?: number;
+}
+
+async function handleCommentCreated(env: Env, payload: BasecampWebhookPayload): Promise<WebhookResult> {
   // Comment was added to a recording - check if it's a linked card
   const recording = payload.recording;
   if (!recording.parent) {
@@ -92,7 +103,7 @@ ${recording.content || ""}`;
   return { status: "synced", type: "comment", issueNumber: mapping.issueNumber };
 }
 
-async function handleCardUpdated(env: Env, payload: BasecampWebhookPayload) {
+async function handleCardUpdated(env: Env, payload: BasecampWebhookPayload): Promise<WebhookResult> {
   const recording = payload.recording;
   const projectId = recording.bucket.id.toString();
   const cardId = recording.id.toString();
